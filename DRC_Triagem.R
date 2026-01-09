@@ -114,7 +114,10 @@ print(summary(modelo),n=24)
 
 # Comparação rápida entre o IC50 os tratamentos no modelo
 # Observa-se que apenas os tratamentos 3,5 e 6 tem significância entre si
-compParm(modelo, "IC50", "-")
+# Só funciona se tiver o que comparar (mais de uma condição/tratamento)
+if (tratamentos > 1){
+  compParm(modelo, "IC50", "-")
+}
 
 #Cria um tibble contendo valoes de dose:
 # do mínimo ao máximo de doses testadas
@@ -128,7 +131,7 @@ name_trats<-unique(prep_mean_norm$condition)
 
 predict_data %>% 
   mutate(
-    condition = rep(name_trats, each=(nrow(predict_data)/6))
+    condition = rep(name_trats, each=(nrow(predict_data)/tratamentos))
   )->predict_data
 
 #Cria uma coluna do último tibble criado (agora df) com as predições do modelo
