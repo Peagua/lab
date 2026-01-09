@@ -1,8 +1,8 @@
-\# Instruções para uso das funções
+# Instruções para uso das funções
 
 
 
-Função prep\_mtt:
+## Função prep\_mtt:
 
 Primeiro, deve-se carregar o arquivo excel contendo os resultados
 A deve se preparar os dados segundo o script abaixo
@@ -27,7 +27,7 @@ Primeira linha fica como V1, V2...)
 
 
 
-Função get\_stats:
+## Função get\_stats:
 
 Recebe:
 
@@ -47,7 +47,7 @@ retornados pela função.
 
 
 
-Script Modelo\_geral\_DRC:
+## Script Modelo\_geral\_DRC:
 
 
 
