@@ -210,7 +210,14 @@ statis %>%
   scale_y_continuous(
     expand = c(0,0),
     limits = c(0,(max(statis$Mean_T1+statis$SD_T1))+5))+
-  labs(title = "Viabilidade Celular por Concentração de Tratamento")
+  labs(title = "Viabilidade Celular por Concentração de Tratamento")->graf
+
+print(graf)
+
+#Salvar o gráfico em jpg
+ggsave("Graf_Barras.jpg",
+       plot = graf,
+       width = 7, height = 5, dpi = 300)
 
 
 
