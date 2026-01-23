@@ -13,8 +13,6 @@ library(dr4pl)
 
 #Função pra padronizar os dados pro MTT
 
-
-
 prep_mtt<-function(dados, #matriz contendo dados
                    branco = c(), #vetor(linha_inicio, col_inicio)
                    reps = 4, #número de repetições
@@ -94,26 +92,8 @@ prep_mtt<-function(dados, #matriz contendo dados
   return(dados_transp)
 }
 
-#Testando a função
-
-setwd("C:/Users/teodo/Desktop/Lab/MTT Triagem/")
-
-data<-as.data.frame(read_excel("duas_placas.xlsx"))
-data<-data[,-1]
-data<-as.matrix(data)
-colnames(data)=NULL
-
-prep_total<-prep_mtt(data,branco = c(5,2),
-                     trat = c(1,1,6),ctrl_neg = c(5,1),
-                     con_max = c(100))
-
-write.xlsx(prep_total, file = "teste.xlsx")
-
-
 
 #Função para gerar estatísticas dos dados da função acima (normalizada ou não)
-
-
 
 get_stats<-function(dados,
                     ntrats = 1,
@@ -177,14 +157,31 @@ get_stats<-function(dados,
   return(df_stat)
 }
 
-setwd("C:/Users/teodo/Desktop")
-dados<-read_xlsx("M199_abril.xlsx")
-dados<-as.matrix(dados)
-colnames(dados) = NULL
+# Aplicando as funções e scripts
 
-statis<-get_stats(dados = dados,
-                  ntrats = 1,
-                  reps = 4,
+setwd("C:/Users/teodo/Desktop/Lab/MTT TCC/22-01/")
+
+data<-as.data.frame(read_excel("MTT_22-01.xlsx"))
+data<-data[,-1]
+data<-as.matrix(data)
+colnames(data)=NULL
+
+tratamentos<-2
+reps<-4
+loc_trats<-c(1,1,10,5,1,10)
+loc_branco<-c(5,12)
+loc_ctrl_neg<-c(1,12)
+concentr_max<-c(50)
+
+
+prep_total<-prep_mtt(data,branco = loc_branco,
+                     trat = loc_trats,ctrl_neg = loc_ctrl_neg,
+                     con_max = concentr_max)
+
+
+statis<-get_stats(dados = prep_total,
+                  ntrats = tratamentos,
+                  reps = reps,
                   ctrl_neg = T,normal = T)
 
 colnames(statis)
@@ -198,38 +195,27 @@ class(statis$Concentrações)
 
 statis %>% 
   ggplot(aes(x = Concentrações,
-             y = Mean_T1))+
+             y = Mean_T1))+ # Muda para + tratamentos
   geom_col(colour = "black",fill = "white")+
   theme_bw(base_size = 13, base_line_size = 0.8)+
-  geom_errorbar(aes(ymin = Mean_T1 - SD_T1,
-                    ymax = Mean_T1 + SD_T1, width = 0.2))+
+  geom_errorbar(aes(ymin = Mean_T1 - SD_T1, # Muda para + tratamentos
+                    ymax = Mean_T1 + SD_T1, width = 0.2))+ # Muda para + trats
   ylab("Viabilidade Celular (%)")+
   xlab("Cooncentração (μΜ)")+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))+
   theme(panel.grid = element_blank())+
   scale_y_continuous(
     expand = c(0,0),
-    limits = c(0,(max(statis$Mean_T1+statis$SD_T1))+5))+
+    limits = c(0,(max(statis$Mean_T1+statis$SD_T1))+5))+ # Muda para + trats
   labs(title = "Viabilidade Celular por Concentração de Tratamento")->graf
-
+#               Muda o título do graf tb p/ + trats
 print(graf)
-
-#Salvar o gráfico em jpg
-ggsave("Graf_Barras.jpg",
-       plot = graf,
-       width = 7, height = 5, dpi = 300)
 
 
 
 #Script para criar modelo DRC (dose-response curve, loglogit4-parameter)
 
 
-
-set_theme(theme_bw())
-
-prep_total<-read.xlsx("C:/Users/teodo/Desktop/M199_abril.xlsx")
-tratamentos<-1
-reps<-4
 
 #Transforma a matriz de dados em df e nomeia as colunas, depois vira tibble
 nomes_col<-c("dose")
