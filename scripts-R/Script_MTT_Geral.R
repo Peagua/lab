@@ -418,8 +418,8 @@ modelos <- lapply(prep_norm_trats, function(trat){
 })
 
 for (i in 1:tratamentos){
-	print(tidy(modelo))
-	print(confint(modelo))
-	print(modelFit(modelo))
+	print(tidy(modelos[[i]]))
+	print(confint(modelos[[i]]))
+	print(modelFit(modelos[[i]]))
 }
 
