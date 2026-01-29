@@ -201,7 +201,7 @@ statis %>%
   geom_errorbar(aes(ymin = Mean_T1 - SD_T1, # Muda para + tratamentos
                     ymax = Mean_T1 + SD_T1, width = 0.2))+ # Muda para + trats
   ylab("Viabilidade Celular (%)")+
-  xlab("Cooncentração (μΜ)")+
+  xlab("Concentração (μΜ)")+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))+
   theme(panel.grid = element_blank())+
   scale_y_continuous(
@@ -393,3 +393,33 @@ noEffect(modelo)
 
 #Intervalo de confiança dos parâmetros (95% é o padrão)
 confint(modelo)
+
+
+#---------------------------------------------------#
+#---Tentando criar um modelo para cada tratamento---#
+#------Pra encontrar os modelos significativos------#
+#---------------------------------------------------#
+
+# Separa os dados do prep_norm de acordo com o tratamento, em uma lista
+# Cada elemento da lista é o tibble de cada tratamento
+# Em seguida renomeia cada elemento da lista para o nome dos trats (T1,T2,...)
+prep_norm %>% 
+  group_split(condition)->prep_norm_trats
+names(prep_norm_trats)<-name_trats
+
+# Cria uma lista contendo os modelos do drc para cada tratamento
+modelos <- lapply(prep_norm_trats, function(trat){
+  drm(
+    data = trat,
+    formula = norm_response ~ dose,
+    curveid = condition,
+    fct = LL.4(names = c("Hill Slope","Min","Max", "IC50"))
+  )
+})
+
+for (i in 1:tratamentos){
+	print(tidy(modelo))
+	print(confint(modelo))
+	print(modelFit(modelo))
+}
+
