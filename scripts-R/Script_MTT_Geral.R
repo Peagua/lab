@@ -369,8 +369,10 @@ prep_mean_norm %>%
 
 
 #Sumários do modelo
-summary(modelo)
 tidy(modelo)
+
+#Intervalo de confiança dos parâmetros (95% é o padrão)
+confint(modelo)
 
 #Lack-of-fit test do modelo
 # H0: Não há falta de ajuste além do erro experimental
@@ -378,10 +380,6 @@ tidy(modelo)
 # H0: O modelo ajusta adequadamente os dados
 # Se p > 0.05, o IC50 estimado é estatisticamente defensível
 modelFit(modelo)
-
-#Detecta os resíduos outliers (de acordo com o modelo)
-outliers<-OutlierDetection(residuals(modelo))
-resid(modelo)[outliers]
 
 #Basicamente mostra alguns testes do modelo
 #loglikelihood - AIC - p-value do Lack of fit - variância dos resíduos
@@ -391,8 +389,11 @@ mselect(modelo)
 #Se p < 0.0001, existe um efeito de dose altamente significante
 noEffect(modelo)
 
-#Intervalo de confiança dos parâmetros (95% é o padrão)
-confint(modelo)
+#Detecta os resíduos outliers (de acordo com o modelo)
+outliers<-OutlierDetection(residuals(modelo))
+resid(modelo)[outliers]
+
+
 
 
 #---------------------------------------------------#
