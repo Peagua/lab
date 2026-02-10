@@ -106,7 +106,7 @@ get_stats<-function(dados,
     for (i in 1:ntrats){
       media<-round(apply(dados[,(2+reps*(i-1)):(5+reps*(i-1))],1,FUN = mean),3)
       sd<-round(apply(dados[,(2+reps*(i-1)):(5+reps*(i-1))],1,FUN = sd),3)
-      sem<-round(sd/reps,3)
+      sem<-round(sd/sqrt(reps),3)
       mat_stat[,(2+reps*(i-1))]<-media
       mat_stat[,(3+reps*(i-1))]<-sd
       mat_stat[,(4+reps*(i-1))]<-sem
@@ -129,7 +129,7 @@ get_stats<-function(dados,
                          FUN = mean),3)
       sd<-round(apply(dados_norm[,(2+reps*(i-1)):(5+reps*(i-1))],1,
                       FUN = sd),3)
-      sem<-round(sd/reps,3)
+      sem<-round(sd/sqrt(reps),3)
       mat_stat[,(2+3*(i-1))]<-media
       mat_stat[,(3+3*(i-1))]<-sd
       mat_stat[,(4+3*(i-1))]<-sem
